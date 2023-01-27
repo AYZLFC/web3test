@@ -44,7 +44,7 @@ function App() {
         const balance = await web3.eth.getBalance(contract.address)
         setBalance(web3.utils.fromWei(balance),"ether")
       }
-      loadBalance()
+      web3Api.contract && loadBalance()
     },[web3Api])
 
     useEffect(() => {
@@ -52,7 +52,7 @@ function App() {
         const accounts = await web3Api.web3.eth.getAccounts()
         setAccount(accounts[0])
       }  
-      getAccount()
+      web3Api.web3 && getAccount()
     },[web3Api.web3])
 
     const addFunds = async () => {
@@ -66,7 +66,7 @@ function App() {
     const withdraw = async () => {
       const {contract,web3} = web3Api
       const withdrawAmount = web3.utils.toWei("0.1","ether")
-      await contract.withdraw(withdrawAmount, {From:account})
+      await contract.withdraw(withdrawAmount, {from:account})
     }
 
   return (
