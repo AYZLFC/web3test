@@ -16,6 +16,8 @@ function App() {
 
   const [balance, setBalance] = useState(null)
   const [account, setAccount] = useState(null)
+  const [deposit, setDeposit] = useState('')
+  const [withdrawAmount, setWithdrawAmount] = useState('')
 
   useEffect(()=>{
     const loadProvider = async () => {
@@ -59,14 +61,22 @@ function App() {
       const {contract,web3} = web3Api
       await contract.addFunds({
         from:account,
-        value:web3.utils.toWei("1","ether")
+        value:web3.utils.toWei(deposit,"ether")
       })
     }
 
     const withdraw = async () => {
       const {contract,web3} = web3Api
-      const withdrawAmount = web3.utils.toWei("0.1","ether")
-      await contract.withdraw(withdrawAmount, {from:account})
+      const withDrawAmount = web3.utils.toWei(withdrawAmount,"ether")
+      await contract.withdraw(withDrawAmount, {from:account})
+    }
+
+    function handleDeposit(e){
+      setDeposit(e.target.value)
+    }
+
+    function handleWithdrawAmount(e){
+      setWithdrawAmount(e.target.value)
     }
 
   return (
@@ -74,8 +84,12 @@ function App() {
       <div>Current Balance is {balance} Ether</div>     
       <div>Check that your account is {account}</div>
       <div>
-        <button onClick={addFunds}>Add 1 ether</button>
-        <button onClick={withdraw}>Withdraw 0.1 ether</button>
+        <input onChange={handleDeposit}/>
+        <button onClick={addFunds}>Add funds</button>
+      </div>
+      <div>
+        <input onChange={handleWithdrawAmount}/>
+        <button onClick={withdraw}>Withdraw funds</button>
       </div>
     </div>
   );
